@@ -20,9 +20,7 @@ export class ReadlineInterface {
       const trimmedLine = line.trim();
 
       if (!line) {
-        this.#readline.prompt();
-
-        return;
+        return this.#readline.prompt();
       }
 
       if (trimmedLine === ".exit") {
@@ -33,11 +31,11 @@ export class ReadlineInterface {
         await callback(trimmedLine);
 
         this.#logger.logCwd();
-        this.#readline.prompt();
       } catch (error) {
         this.#logger.logError(error);
-        this.#readline.prompt();
       }
+
+      this.#readline.prompt();
     });
   }
 

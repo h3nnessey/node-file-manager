@@ -1,18 +1,25 @@
 import { ProcessService } from "../services/process-service.js";
+import { OsService } from "../services/os-service.js";
 import { InvalidInputError } from "../utils/error/index.js";
 
 const CMD_CONFIG = new Map([
   ["cd", { type: "process", argsCount: 1 }],
   ["up", { type: "process", argsCount: 0 }],
+  ["os", { type: "os", argsCount: 1 }],
 ]);
 
 export class CommandsController {
   constructor() {
     this.processService = new ProcessService();
+    this.osService = new OsService();
   }
 
   async process(cmd, args) {
     await this.processService[cmd](args);
+  }
+
+  async os(_, args) {
+    await this.osService.exec(args);
   }
 
   async exec(line) {

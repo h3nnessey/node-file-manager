@@ -7,7 +7,7 @@ import {
 export class ProcessService {
   constructor() {}
 
-  async cd(path) {
+  cd(path) {
     if (!path) {
       throw new InvalidInputError();
     }

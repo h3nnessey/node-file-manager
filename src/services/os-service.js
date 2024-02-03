@@ -7,11 +7,11 @@ import {
 export class OsService {
   constructor() {}
 
-  async EOL() {
+  EOL() {
     console.log(JSON.stringify(EOL));
   }
 
-  async cpus() {
+  cpus() {
     const cpusInfo = cpus().map((cpu) => ({
       model: cpu.model,
       speed: (cpu.speed / 1000).toFixed(2) + "GHz",
@@ -21,19 +21,19 @@ export class OsService {
     console.table(cpusInfo);
   }
 
-  async homedir() {
+  homedir() {
     console.log(homedir());
   }
 
-  async username() {
+  username() {
     console.log(userInfo().username);
   }
 
-  async architecture() {
+  architecture() {
     console.log(arch());
   }
 
-  async exec(cmd) {
+  exec(cmd) {
     // todo: validate all possible cases later
 
     if (!cmd.startsWith("--")) {
@@ -44,7 +44,7 @@ export class OsService {
 
     if (command in this) {
       try {
-        await this[command]();
+        this[command]();
       } catch {
         throw new OperationFailedError();
       }

@@ -15,11 +15,11 @@ export class CommandsController {
   }
 
   async process(cmd, args) {
-    await this.processService[cmd](args);
+    this.processService[cmd](args);
   }
 
   async os(_, args) {
-    await this.osService.exec(args);
+    this.osService.exec(args);
   }
 
   async exec(line) {

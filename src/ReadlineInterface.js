@@ -1,9 +1,9 @@
 import { createInterface } from "node:readline/promises";
-import { userInfo } from "node:os";
+import { Logger } from "./utils/cli/Logger.js";
 
 export class ReadlineInterface {
   #readline;
-  #username;
+  #logger;
 
   constructor() {
     this.#readline = createInterface({
@@ -12,39 +12,35 @@ export class ReadlineInterface {
       prompt: "≫ ",
     });
 
-    this.#username = this.#getUsernameFromProcessArgv();
+    this.#logger = new Logger();
   }
 
   onLine(callback) {
     this.#readline.on("line", async (line) => {
-      await callback(line);
-      this.#readline.prompt();
+      if (line === ".exit") {
+        return this.#onExit();
+      }
+
+      try {
+        await callback(line);
+
+        this.#logger.logCwd();
+        this.#readline.prompt();
+      } catch (error) {
+        this.#logger.logError(error);
+      }
     });
   }
 
   #onStart() {
-    console.log(`Welcome to the File Manager, ${this.#username}!`);
+    this.#logger.logWelcome();
+    this.#logger.logCwd();
     this.#readline.prompt();
   }
 
   #onExit() {
-    // EOL
-    console.log(
-      `\nThank you for using File Manager, ${this.#username}, goodbye!`
-    );
+    this.#logger.logBye();
     process.exit();
-  }
-
-  #getUsernameFromProcessArgv() {
-    const usernameCandidate = process.argv.find((candidate) =>
-      candidate.startsWith("--username=")
-    );
-
-    if (usernameCandidate) {
-      return usernameCandidate.split("=")[1];
-    }
-
-    return userInfo().username;
   }
 
   run() {

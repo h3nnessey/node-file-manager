@@ -1,16 +1,35 @@
+import { ProcessService } from "../../services/process/ProcessService.js";
+
 export class CommandsController {
+  #processService;
+
   constructor() {
-    // create Parser?
+    this.#processService = new ProcessService();
+  }
+
+  process(cmd, args) {
+    this.#processService[cmd](args);
   }
 
   async exec(line) {
-    // const [command, args] = this.#parseLineArguments(line);
+    const [command, args] = this.#parseLineArguments(line);
+    // const commandType = this.#getCommandType(command);
     // try {
-    //   await this[command](args);
+    //   await this[commandType](command, args);
     // } catch (error) {
     //   throw error;
     // }
   }
 
-  #parseLineArguments(line) {}
+  #getCommandType(command) {
+    // switch (command) {
+    // }
+  }
+
+  #parseLineArguments(line) {
+    const cmd = "rn";
+    const args = ["1", "2"];
+
+    return [cmd, args];
+  }
 }

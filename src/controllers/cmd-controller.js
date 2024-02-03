@@ -1,5 +1,4 @@
-import { NavigationService } from '../services/navigation-service.js';
-import { OsService } from '../services/os-service.js';
+import { HashService, NavigationService, OsService } from '../services/index.js';
 import { InvalidInputError } from '../utils/error/index.js';
 
 const CMD_CONFIG = new Map([
@@ -7,12 +6,14 @@ const CMD_CONFIG = new Map([
   ['up', { type: 'navigation', argsCount: 0 }],
   ['ls', { type: 'navigation', argsCount: 0 }],
   ['os', { type: 'os', argsCount: 1 }],
+  ['hash', { type: 'hash', argsCount: 1 }],
 ]);
 
 export class CommandsController {
   constructor() {
     this.navigationService = new NavigationService();
     this.osService = new OsService();
+    this.hashService = new HashService();
   }
 
   async navigation(cmd, args) {
@@ -20,7 +21,12 @@ export class CommandsController {
   }
 
   async os(_, args) {
+    // args -> cmd?
     this.osService.exec(args);
+  }
+
+  async hash(cmd, args) {
+    await this.hashService[cmd](args);
   }
 
   async exec(line) {

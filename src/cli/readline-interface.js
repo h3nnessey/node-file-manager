@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline/promises";
-import { Logger } from "./utils/cli/Logger.js";
+import { Logger } from "./logger.js";
 
 export class ReadlineInterface {
   #readline;
@@ -17,17 +17,26 @@ export class ReadlineInterface {
 
   onLine(callback) {
     this.#readline.on("line", async (line) => {
-      if (line === ".exit") {
+      const trimmedLine = line.trim();
+
+      if (!line) {
+        this.#readline.prompt();
+
+        return;
+      }
+
+      if (trimmedLine === ".exit") {
         return this.#onExit();
       }
 
       try {
-        await callback(line);
+        await callback(trimmedLine);
 
         this.#logger.logCwd();
         this.#readline.prompt();
       } catch (error) {
         this.#logger.logError(error);
+        this.#readline.prompt();
       }
     });
   }

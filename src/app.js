@@ -1,6 +1,6 @@
 import { homedir } from "node:os";
-import { ReadlineInterface } from "./ReadlineInterface.js";
-import { CommandsController } from "./controllers/cmd/CommandsController.js";
+import { ReadlineInterface } from "./cli/readline-interface.js";
+import { CommandsController } from "./controllers/cmd-controller.js";
 
 export class App {
   #readline;

@@ -18,13 +18,21 @@ export class ReadlineInterface {
   onLine(callback) {
     this.#readline.on("line", async (line) => {
       await callback(line);
-      // logger?
       this.#readline.prompt();
     });
   }
 
-  #printGreetings() {
+  #onStart() {
     console.log(`Welcome to the File Manager, ${this.#username}!`);
+    this.#readline.prompt();
+  }
+
+  #onExit() {
+    // EOL
+    console.log(
+      `\nThank you for using File Manager, ${this.#username}, goodbye!`
+    );
+    process.exit();
   }
 
   #getUsernameFromProcessArgv() {
@@ -40,7 +48,7 @@ export class ReadlineInterface {
   }
 
   run() {
-    this.#printGreetings();
-    this.#readline.prompt();
+    this.#onStart();
+    this.#readline.on("SIGINT", this.#onExit.bind(this));
   }
 }

@@ -15,21 +15,16 @@ export class ReadlineInterface {
     this.#username = this.#getUsernameFromProcessArgv();
   }
 
-  prompt() {
-    this.#readline.prompt();
-  }
-
   onLine(callback) {
-    this.#readline.on("line", callback);
-  }
-
-  parseInputArguments(line) {
-    // return os/fs/hash/zip etc + arguments
-    return [1, 2];
+    this.#readline.on("line", async (line) => {
+      await callback(line);
+      // logger?
+      this.#readline.prompt();
+    });
   }
 
   #printGreetings() {
-    console.log(`Welcome to the File Manager, ${this.#username}`);
+    console.log(`Welcome to the File Manager, ${this.#username}!`);
   }
 
   #getUsernameFromProcessArgv() {
@@ -46,6 +41,6 @@ export class ReadlineInterface {
 
   run() {
     this.#printGreetings();
-    this.prompt();
+    this.#readline.prompt();
   }
 }

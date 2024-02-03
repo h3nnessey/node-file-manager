@@ -56,9 +56,13 @@ export class NavigationService {
         return resultItem;
       });
 
-      const directories = mappedContent.filter((item) => item.type === DIRENT_TYPES.DIRECTORY);
-      const files = mappedContent.filter((item) => item.type === DIRENT_TYPES.FILE);
-      const symlinks = mappedContent.filter((item) => item.type === DIRENT_TYPES.SYMBOLIC_LINK);
+      const directories = mappedContent
+        .filter((item) => item.type === DIRENT_TYPES.DIRECTORY)
+        .sort();
+      const files = mappedContent.filter((item) => item.type === DIRENT_TYPES.FILE).sort();
+      const symlinks = mappedContent
+        .filter((item) => item.type === DIRENT_TYPES.SYMBOLIC_LINK)
+        .sort();
 
       console.table(directories.concat(files, symlinks));
     } catch (err) {

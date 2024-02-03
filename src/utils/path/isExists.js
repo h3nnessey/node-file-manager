@@ -1,4 +1,4 @@
-import { access } from "node:fs/promises";
+import { access } from 'node:fs/promises';
 
 export const isExists = async (path) => {
   try {

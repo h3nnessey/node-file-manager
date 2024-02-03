@@ -1,5 +1,5 @@
-import { createInterface } from "node:readline/promises";
-import { Logger } from "./logger.js";
+import { createInterface } from 'node:readline/promises';
+import { Logger } from './logger.js';
 
 export class ReadlineInterface {
   #readline;
@@ -9,21 +9,21 @@ export class ReadlineInterface {
     this.#readline = createInterface({
       input: process.stdin,
       output: process.stdout,
-      prompt: "≫ ",
+      prompt: '≫ ',
     });
 
     this.#logger = new Logger();
   }
 
   onLine(callback) {
-    this.#readline.on("line", async (line) => {
+    this.#readline.on('line', async (line) => {
       const trimmedLine = line.trim();
 
       if (!line) {
         return this.#readline.prompt();
       }
 
-      if (trimmedLine === ".exit") {
+      if (trimmedLine === '.exit') {
         return this.#onExit();
       }
 
@@ -52,6 +52,6 @@ export class ReadlineInterface {
 
   run() {
     this.#onStart();
-    this.#readline.on("SIGINT", this.#onExit.bind(this));
+    this.#readline.on('SIGINT', this.#onExit.bind(this));
   }
 }

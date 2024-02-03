@@ -1,4 +1,4 @@
-import { userInfo, EOL } from "node:os";
+import { userInfo, EOL } from 'node:os';
 
 export class Logger {
   #username;
@@ -12,9 +12,7 @@ export class Logger {
   }
 
   logError(error) {
-    console.log(
-      error instanceof Error ? error.message : "Something went wrong..."
-    );
+    console.log(error instanceof Error ? error.message : 'Something went wrong...');
   }
 
   logWelcome() {
@@ -22,18 +20,14 @@ export class Logger {
   }
 
   logBye() {
-    console.log(
-      `${EOL}Thank you for using File Manager, ${this.#username}, goodbye!`
-    );
+    console.log(`${EOL}Thank you for using File Manager, ${this.#username}, goodbye!`);
   }
 
   #getUsernameFromProcessArgv() {
-    const usernameCandidate = process.argv.find((candidate) =>
-      candidate.startsWith("--username=")
-    );
+    const usernameCandidate = process.argv.find((candidate) => candidate.startsWith('--username='));
 
     if (usernameCandidate) {
-      return usernameCandidate.split("=")[1];
+      return usernameCandidate.split('=')[1];
     }
 
     return userInfo().username;

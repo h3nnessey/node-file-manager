@@ -1,5 +1,5 @@
 export class InvalidInputError extends Error {
   constructor() {
-    super("Invalid input");
+    super('Invalid input');
   }
 }

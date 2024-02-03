@@ -1,8 +1,5 @@
-import { EOL, cpus, homedir, userInfo, arch } from "node:os";
-import {
-  InvalidInputError,
-  OperationFailedError,
-} from "../utils/error/index.js";
+import { EOL, cpus, homedir, userInfo, arch } from 'node:os';
+import { InvalidInputError, OperationFailedError } from '../utils/error/index.js';
 
 export class OsService {
   constructor() {}
@@ -14,7 +11,7 @@ export class OsService {
   cpus() {
     const cpusInfo = cpus().map((cpu) => ({
       model: cpu.model,
-      speed: (cpu.speed / 1000).toFixed(2) + "GHz",
+      speed: (cpu.speed / 1000).toFixed(2) + 'GHz',
     }));
 
     console.log(`Overall amount of CPUS: ${cpusInfo.length}`);
@@ -36,11 +33,11 @@ export class OsService {
   exec(cmd) {
     // todo: validate all possible cases later
 
-    if (!cmd.startsWith("--")) {
+    if (!cmd.startsWith('--')) {
       throw new InvalidInputError();
     }
 
-    const command = cmd.replaceAll("--", "");
+    const command = cmd.replaceAll('--', '');
 
     if (command in this) {
       try {

@@ -1,8 +1,8 @@
 export const CMD_CONFIG = {
   QUOTES: {
-    TYPES: ['"', "'"],
-    REGEXP_GROUP: /("|')(.*?)("|')/gm,
-    REGEXP_SINGLE: /("|')/gm,
+    TYPES: ['"'],
+    REGEXP_GROUP: /"(.*?)"/gm,
+    REGEXP_SINGLE: /"/gm,
   },
   COMMANDS: new Map([
     ['cd', { type: 'navigation', argsCount: 1 }],

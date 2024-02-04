@@ -8,6 +8,7 @@ import {
 import { InvalidInputError } from '../utils/error/index.js';
 import { CMD_CONFIG } from '../constants/index.js';
 
+// add new_file_name should contain extname?
 export class CommandsController {
   constructor() {
     this.navigationService = new NavigationService();
@@ -32,6 +33,10 @@ export class CommandsController {
 
   async archive(cmd, args) {
     await this.archiveService[cmd](args);
+  }
+
+  async fs(cmd, args) {
+    await this.fsService[cmd](args);
   }
 
   async exec(line) {

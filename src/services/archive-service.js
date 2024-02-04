@@ -1,5 +1,5 @@
 import { createReadStream, createWriteStream } from 'node:fs';
-import { createBrotliCompress, constants } from 'node:zlib';
+import { createBrotliCompress, createBrotliDecompress, constants } from 'node:zlib';
 import { resolve, extname } from 'node:path';
 import { pipeline } from 'node:stream/promises';
 import { InvalidInputError, OperationFailedError } from '../utils/error/index.js';
@@ -30,10 +30,28 @@ export class ArchiveService {
       const writeStream = createWriteStream(destinationPath, { flags: 'wx' });
 
       await pipeline(readStream, brotliCompress, writeStream);
-    } catch (error) {
+    } catch {
       throw new OperationFailedError();
     }
   }
 
-  async decompress() {}
+  async decompress([src, dest]) {
+    const sourcePath = resolve(src);
+    const destinationPath = resolve(dest);
+
+    const srcIsArchive = extname(sourcePath) === this.brotliExtname;
+
+    if (!srcIsArchive) throw new InvalidInputError();
+
+    try {
+      const brotliDecompress = createBrotliDecompress();
+
+      const readStream = createReadStream(sourcePath);
+      const writeStream = createWriteStream(destinationPath, { flags: 'wx' });
+
+      await pipeline(readStream, brotliDecompress, writeStream);
+    } catch {
+      throw new OperationFailedError();
+    }
+  }
 }

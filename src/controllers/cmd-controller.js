@@ -1,14 +1,5 @@
 import { HashService, NavigationService, OsService } from '../services/index.js';
-import { InvalidInputError } from '../utils/error/index.js';
-
-const CMD_CONFIG = new Map([
-  ['cd', { type: 'navigation', argsCount: 1 }],
-  ['up', { type: 'navigation', argsCount: 0 }],
-  ['ls', { type: 'navigation', argsCount: 0 }],
-  ['os', { type: 'os', argsCount: 1 }],
-  ['hash', { type: 'hash', argsCount: 1 }],
-]);
-
+import { parseLineArguments } from '../utils/cli/parse-line-arguments.js';
 export class CommandsController {
   constructor() {
     this.navigationService = new NavigationService();
@@ -20,9 +11,8 @@ export class CommandsController {
     await this.navigationService[cmd](args);
   }
 
-  async os(_, args) {
-    // args -> cmd?
-    this.osService.exec(args);
+  async os(_, cmd) {
+    this.osService.exec(cmd);
   }
 
   async hash(cmd, args) {
@@ -31,25 +21,11 @@ export class CommandsController {
 
   async exec(line) {
     try {
-      const [cmd, cmdType, args] = this.#parseLineArguments(line);
+      const [cmd, cmdType, args] = parseLineArguments(line);
 
       await this[cmdType](cmd, args);
     } catch (error) {
       throw error;
     }
-  }
-
-  #parseLineArguments(line) {
-    const [cmd, ...args] = line.split(' ');
-    const commandConfig = CMD_CONFIG.get(cmd);
-    const trimmedArgs = args.join(' ').trim(); // after split(' ') -> [''] if nothing passed
-
-    if (!commandConfig) {
-      throw new InvalidInputError();
-    }
-
-    // need to parse in loop first
-
-    return [cmd, commandConfig.type, trimmedArgs];
   }
 }

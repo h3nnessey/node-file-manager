@@ -31,8 +31,6 @@ export class OsService {
   }
 
   exec(cmd) {
-    // todo: validate all possible cases later
-
     if (!cmd.startsWith('--')) {
       throw new InvalidInputError();
     }

@@ -9,8 +9,6 @@ const DIRENT_TYPES = {
 };
 
 export class NavigationService {
-  constructor() {}
-
   cd(path) {
     if (!path) {
       throw new InvalidInputError();

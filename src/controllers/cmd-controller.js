@@ -1,10 +1,20 @@
-import { HashService, NavigationService, OsService } from '../services/index.js';
+import {
+  HashService,
+  NavigationService,
+  OsService,
+  ArchiveService,
+  FsService,
+} from '../services/index.js';
+import { InvalidInputError } from '../utils/error/index.js';
 import { CMD_CONFIG } from '../constants/index.js';
+
 export class CommandsController {
   constructor() {
     this.navigationService = new NavigationService();
     this.osService = new OsService();
     this.hashService = new HashService();
+    this.archiveService = new ArchiveService();
+    this.fsService = new FsService();
     this.config = CMD_CONFIG;
   }
 
@@ -18,6 +28,10 @@ export class CommandsController {
 
   async hash(cmd, args) {
     await this.hashService[cmd](args);
+  }
+
+  async archive(cmd, args) {
+    await this.archiveService[cmd](args);
   }
 
   async exec(line) {

@@ -2,8 +2,6 @@ import { EOL, cpus, homedir, userInfo, arch } from 'node:os';
 import { InvalidInputError, OperationFailedError } from '../utils/error/index.js';
 
 export class OsService {
-  constructor() {}
-
   EOL() {
     console.log(JSON.stringify(EOL));
   }

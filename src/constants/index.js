@@ -16,5 +16,7 @@ export const CMD_CONFIG = {
     ['cp', { type: 'fs', argsCount: 2 }],
     ['mv', { type: 'fs', argsCount: 2 }],
     ['rm', { type: 'fs', argsCount: 1 }],
+    ['compress', { type: 'archive', argsCount: 2 }],
+    ['decompress', { type: 'archive', argsCount: 2 }],
   ]),
 };

@@ -1,10 +1,11 @@
 import { HashService, NavigationService, OsService } from '../services/index.js';
-import { parseLineArguments } from '../utils/cli/parse-line-arguments.js';
+import { CMD_CONFIG } from '../constants/index.js';
 export class CommandsController {
   constructor() {
     this.navigationService = new NavigationService();
     this.osService = new OsService();
     this.hashService = new HashService();
+    this.config = CMD_CONFIG;
   }
 
   async navigation(cmd, args) {
@@ -21,11 +22,56 @@ export class CommandsController {
 
   async exec(line) {
     try {
-      const [cmd, cmdType, args] = parseLineArguments(line);
+      const [cmd, cmdType, args] = this.#parseLine(line);
 
       await this[cmdType](cmd, args);
     } catch (error) {
       throw error;
     }
   }
+
+  #parseLine = (lineToParse) => {
+    const [cmd, ...args] = lineToParse.split(' ');
+    const {
+      COMMANDS,
+      QUOTES: { REGEXP_GROUP, REGEXP_SINGLE, TYPES },
+    } = this.config;
+    const cmdConfig = COMMANDS.get(cmd);
+
+    if (!cmdConfig) {
+      throw new InvalidInputError();
+    }
+
+    let argsStringified = args.join(' ').trim();
+
+    const parsedArgs = [];
+
+    while (argsStringified.length) {
+      const quoteCandidate = argsStringified[0];
+
+      if (TYPES.includes(quoteCandidate)) {
+        const matches = argsStringified.match(REGEXP_GROUP);
+
+        const noQuotesMatches = matches.map((match) => match.replaceAll(REGEXP_SINGLE, ''));
+
+        matches.forEach((match) => {
+          argsStringified = argsStringified.replace(match, '').trim();
+        });
+
+        parsedArgs.push(...noQuotesMatches);
+      } else {
+        const firstOfArgs = argsStringified.split(' ')[0];
+
+        argsStringified = argsStringified.replace(firstOfArgs, '').trim();
+
+        parsedArgs.push(firstOfArgs);
+      }
+    }
+
+    if (parsedArgs.length !== cmdConfig.argsCount) throw new InvalidInputError();
+
+    const argsResult = parsedArgs.length > 1 ? parsedArgs : parsedArgs.toString();
+
+    return [cmd, cmdConfig.type, argsResult];
+  };
 }

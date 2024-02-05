@@ -5,7 +5,7 @@ import { pipeline } from 'node:stream/promises';
 import { OperationFailedError } from '../utils/error/index.js';
 
 export class HashService {
-  async hash(path) {
+  async hash([path]) {
     const readStream = createReadStream(resolve(path));
     const hash = createHash('sha256');
 

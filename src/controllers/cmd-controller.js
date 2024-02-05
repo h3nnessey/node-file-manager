@@ -8,7 +8,6 @@ import {
 import { InvalidInputError } from '../utils/error/index.js';
 import { CMD_CONFIG } from '../constants/index.js';
 
-// add new_file_name should contain extname?
 export class CommandsController {
   constructor() {
     this.navigationService = new NavigationService();
@@ -51,45 +50,36 @@ export class CommandsController {
 
   #parseLine = (lineToParse) => {
     const [cmd, ...args] = lineToParse.split(' ');
-    const {
-      COMMANDS,
-      QUOTES: { REGEXP_GROUP, REGEXP_SINGLE, TYPES },
-    } = this.config;
+    const { COMMANDS, QUOTES } = this.config;
     const cmdConfig = COMMANDS.get(cmd);
 
     if (!cmdConfig) {
       throw new InvalidInputError();
     }
 
-    let argsStringified = args.join(' ').trim();
+    let currentArgs = args.join(' ').trim();
+    let currentArg = '';
 
-    const parsedArgs = [];
+    const argsResult = [];
 
-    while (argsStringified.length) {
-      const quoteCandidate = argsStringified[0];
+    while (currentArgs.length) {
+      if (QUOTES.TYPES.includes(currentArgs[0])) {
+        const firstEntry = currentArgs.match(QUOTES.REGEXP_GROUP)[0];
 
-      if (TYPES.includes(quoteCandidate)) {
-        const matches = argsStringified.match(REGEXP_GROUP);
-
-        const noQuotesMatches = matches.map((match) => match.replaceAll(REGEXP_SINGLE, ''));
-
-        matches.forEach((match) => {
-          argsStringified = argsStringified.replace(match, '').trim();
-        });
-
-        parsedArgs.push(...noQuotesMatches);
+        currentArgs = currentArgs.replace(firstEntry, '').trim();
+        currentArg = firstEntry.replaceAll(QUOTES.REGEXP_SINGLE, '');
       } else {
-        const firstOfArgs = argsStringified.split(' ')[0];
-
-        argsStringified = argsStringified.replace(firstOfArgs, '').trim();
-
-        parsedArgs.push(firstOfArgs);
+        currentArg = currentArgs.split(' ')[0];
+        currentArgs = currentArgs.replace(currentArg, '').trim();
       }
+
+      argsResult.push(currentArg);
+      currentArg = '';
     }
 
-    if (parsedArgs.length !== cmdConfig.argsCount) throw new InvalidInputError();
-
-    const argsResult = parsedArgs.length > 1 ? parsedArgs : parsedArgs.toString();
+    if (argsResult.length !== cmdConfig.argsCount) {
+      throw new InvalidInputError();
+    }
 
     return [cmd, cmdConfig.type, argsResult];
   };

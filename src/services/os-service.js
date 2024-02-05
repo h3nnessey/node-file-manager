@@ -28,12 +28,12 @@ export class OsService {
     console.log(arch());
   }
 
-  exec(cmd) {
+  exec([cmd]) {
     if (!cmd.startsWith('--')) {
       throw new InvalidInputError();
     }
 
-    const command = cmd.replaceAll('--', '');
+    const command = cmd.replace('--', '');
 
     if (command in this) {
       try {

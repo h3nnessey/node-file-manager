@@ -20,3 +20,10 @@ export const CMD_CONFIG = {
     ['decompress', { type: 'archive', argsCount: 2 }],
   ]),
 };
+
+export const DIRENT_TYPES = {
+  DIRECTORY: 'directory',
+  FILE: 'file',
+  SYMBOLIC_LINK: 'symlink',
+  UNKNOWN: 'unknown',
+};

@@ -62,19 +62,23 @@ export class CommandsController {
 
     const argsResult = [];
 
-    while (currentArgs.length) {
-      if (QUOTES.TYPES.includes(currentArgs[0])) {
-        const firstEntry = currentArgs.match(QUOTES.REGEXP_GROUP)[0];
+    try {
+      while (currentArgs.length) {
+        if (QUOTES.TYPES.includes(currentArgs[0])) {
+          currentArg = currentArgs.match(QUOTES.REGEXP_GROUP)[0];
 
-        currentArgs = currentArgs.replace(firstEntry, '').trim();
-        currentArg = firstEntry.replaceAll(QUOTES.REGEXP_SINGLE, '');
-      } else {
-        currentArg = currentArgs.split(' ')[0];
-        currentArgs = currentArgs.replace(currentArg, '').trim();
+          currentArgs = currentArgs.replace(currentArg, '').trim();
+          currentArg = currentArg.replaceAll(QUOTES.REGEXP_SINGLE, '');
+        } else {
+          currentArg = currentArgs.split(' ')[0];
+          currentArgs = currentArgs.replace(currentArg, '').trim();
+        }
+
+        argsResult.push(currentArg);
+        currentArg = '';
       }
-
-      argsResult.push(currentArg);
-      currentArg = '';
+    } catch {
+      throw new InvalidInputError();
     }
 
     if (argsResult.length !== commandConfig.argsCount) {

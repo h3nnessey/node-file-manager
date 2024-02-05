@@ -1,6 +1,6 @@
 import { resolve, parse } from 'node:path';
 import { writeFile, rm, rename } from 'node:fs/promises';
-import { createReadStream } from 'node:fs';
+import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { InvalidInputError, OperationFailedError } from '../utils/error/index.js';
 import { isFile } from '../utils/path/is-file.js';
@@ -71,4 +71,33 @@ export class FsService {
       throw new OperationFailedError();
     }
   }
+
+  // cp ./files/text.txt c:/temp/ - correct example
+  async cp([pathToFile, newPath]) {
+    const filePath = resolve(pathToFile);
+    const isPathToFile = await isFile(filePath);
+
+    const newDirectoryPath = resolve(newPath);
+    const newFilePath = resolve(newDirectoryPath, parse(filePath).base);
+    const isDirectoryNewPath = parse(newDirectoryPath).ext.length === 0;
+
+    if (isPathToFile === false || !isDirectoryNewPath) {
+      throw new InvalidInputError();
+    }
+
+    if (isPathToFile === null) {
+      throw new OperationFailedError();
+    }
+
+    try {
+      const readStream = createReadStream(filePath);
+      const writeStream = createWriteStream(newFilePath, { flags: 'wx' });
+
+      await pipeline(readStream, writeStream);
+    } catch {
+      throw new OperationFailedError();
+    }
+  }
+
+  async mv([pathToFile, newPath]) {}
 }

@@ -1,4 +1,4 @@
-import { resolve, parse, sep } from 'node:path';
+import { resolve, sep } from 'node:path';
 import { readdir } from 'node:fs/promises';
 import { InvalidInputError, OperationFailedError } from '../utils/error/index.js';
 import { DIRENT_TYPES } from '../constants/index.js';

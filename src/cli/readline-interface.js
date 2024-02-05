@@ -32,11 +32,11 @@ export class ReadlineInterface {
         await callback(trimmedLine);
 
         this.#clear();
-        this.#logger.logCwd();
       } catch (error) {
         this.#logger.logError(error);
       }
 
+      this.#logger.logCwd();
       this.#readline.prompt();
     });
   }

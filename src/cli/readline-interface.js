@@ -1,6 +1,7 @@
 import { createInterface } from 'node:readline/promises';
 import { clearLine, cursorTo } from 'node:readline';
 import { Logger } from './logger.js';
+import { colorize } from '../utils/cli/colorize.js';
 
 export class ReadlineInterface {
   #readline;
@@ -10,7 +11,7 @@ export class ReadlineInterface {
     this.#readline = createInterface({
       input: process.stdin,
       output: process.stdout,
-      prompt: '$ ',
+      prompt: colorize('$ ', 'green'),
     });
 
     this.#logger = new Logger();

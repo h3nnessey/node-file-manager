@@ -1,4 +1,5 @@
 import { userInfo, EOL } from 'node:os';
+import { colorize } from '../utils/cli/colorize.js';
 
 export class Logger {
   #username;
@@ -8,19 +9,21 @@ export class Logger {
   }
 
   logCwd() {
-    console.log(`You are currently in ${process.cwd()}`);
+    console.log(`You are currently in ${colorize(process.cwd(), 'cyan')}`);
   }
 
   logError(error) {
-    console.log(error instanceof Error ? error.message : 'Something went wrong...');
+    console.log(colorize(error instanceof Error ? error.message : 'Operation failed', 'red'));
   }
 
   logWelcome() {
-    console.log(`Welcome to the File Manager, ${this.#username}!`);
+    console.log(`Welcome to the File Manager, ${colorize(this.#username, 'yellow')}!`);
   }
 
   logBye() {
-    console.log(`${EOL}Thank you for using File Manager, ${this.#username}, goodbye!`);
+    console.log(
+      `${EOL}Thank you for using File Manager, ${colorize(this.#username, 'yellow')}, goodbye!`,
+    );
   }
 
   #getUsernameFromProcessArgv() {

@@ -10,7 +10,7 @@ export class ReadlineInterface {
     this.#readline = createInterface({
       input: process.stdin,
       output: process.stdout,
-      prompt: '≫ ',
+      prompt: '$ ',
     });
 
     this.#logger = new Logger();

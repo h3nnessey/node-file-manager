@@ -53,7 +53,6 @@ export class FsService {
     }
   }
 
-  // (do not pass pathLike as new_file_name)
   async rn([pathToFile, newName]) {
     const oldPath = resolve(pathToFile);
     const oldPathDir = parse(oldPath).dir;
@@ -72,7 +71,6 @@ export class FsService {
     }
   }
 
-  // cp ./files/text.txt c:/temp/ - correct example
   async cp([pathToFile, newPath]) {
     const filePath = resolve(pathToFile);
     const isPathToFile = await isFile(filePath);

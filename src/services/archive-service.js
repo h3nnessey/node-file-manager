@@ -8,7 +8,6 @@ import { isFile } from '../utils/path/index.js';
 export class ArchiveService {
   brotliExtname = '.br';
 
-  // error if: src doesn't exists, src is archive, src is directory, dest is not archive, dest doesn't exists
   async compress([src, dest]) {
     const sourcePath = resolve(src);
     const destinationPath = resolve(dest);
@@ -39,7 +38,6 @@ export class ArchiveService {
     }
   }
 
-  // error if: src doesn't exists, src is not a file, src is not an archive (.br), dest is archive too, dest doesn't exists
   async decompress([src, dest]) {
     const sourcePath = resolve(src);
     const destinationPath = resolve(dest);

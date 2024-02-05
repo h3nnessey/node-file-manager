@@ -1,4 +1,5 @@
 import { createInterface } from 'node:readline/promises';
+import { clearLine, cursorTo } from 'node:readline';
 import { Logger } from './logger.js';
 
 export class ReadlineInterface {
@@ -30,6 +31,7 @@ export class ReadlineInterface {
       try {
         await callback(trimmedLine);
 
+        this.#clear();
         this.#logger.logCwd();
       } catch (error) {
         this.#logger.logError(error);
@@ -48,6 +50,11 @@ export class ReadlineInterface {
   #onExit() {
     this.#logger.logBye();
     process.exit();
+  }
+
+  #clear() {
+    clearLine(process.stdout, 0);
+    cursorTo(process.stdout, 0);
   }
 
   run() {

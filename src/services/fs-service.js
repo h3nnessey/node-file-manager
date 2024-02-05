@@ -99,5 +99,8 @@ export class FsService {
     }
   }
 
-  async mv([pathToFile, newPath]) {}
+  async mv([pathToFile, newPath]) {
+    await this.cp([pathToFile, newPath]);
+    await rm(resolve(pathToFile));
+  }
 }

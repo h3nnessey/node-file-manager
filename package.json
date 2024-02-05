@@ -1,0 +1,17 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "CLI based File Manager using NodeJS platform",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "node",
+    "cli",
+    "file-manager"
+  ],
+  "author": "h3nnessey",
+  "license": "MIT"
+}

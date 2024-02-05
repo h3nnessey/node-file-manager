@@ -40,9 +40,9 @@ export class CommandsController {
 
   async exec(line) {
     try {
-      const [cmd, cmdType, args] = this.#parseLine(line);
+      const { command, type, args } = this.#parseLine(line);
 
-      await this[cmdType](cmd, args);
+      await this[type](command, args);
     } catch (error) {
       throw error;
     }
@@ -51,9 +51,9 @@ export class CommandsController {
   #parseLine = (lineToParse) => {
     const [cmd, ...args] = lineToParse.split(' ');
     const { COMMANDS, QUOTES } = this.config;
-    const cmdConfig = COMMANDS.get(cmd);
+    const commandConfig = COMMANDS.get(cmd);
 
-    if (!cmdConfig) {
+    if (!commandConfig) {
       throw new InvalidInputError();
     }
 
@@ -77,10 +77,10 @@ export class CommandsController {
       currentArg = '';
     }
 
-    if (argsResult.length !== cmdConfig.argsCount) {
+    if (argsResult.length !== commandConfig.argsCount) {
       throw new InvalidInputError();
     }
 
-    return [cmd, cmdConfig.type, argsResult];
+    return { command: cmd, type: commandConfig.type, args: argsResult };
   };
 }
